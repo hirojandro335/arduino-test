@@ -1,0 +1,26 @@
+{
+  "name": "arduino-test",
+  "version": "0.0.1",
+  "description": "testing arduino codes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/eastmaels/arduino-test.git"
+  },
+  "keywords": [
+    "arduino"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eastmaels/arduino-test/issues"
+  },
+  "homepage": "https://github.com/eastmaels/arduino-test#readme",
+  "dependencies": {
+    "steem": "^0.7.2",
+    "valid-url": "^1.0.9"
+  }
+}
