@@ -2,7 +2,7 @@ const dsteem = require("dsteem")
 const es = require("event-stream")
 
 const MS_TO_COMPLETE = 3000
-const MS_TO_COMPLETE_WITH_BUFFER = 3500
+const MS_TO_COMPLETE_WITH_BUFFER = MS_TO_COMPLETE + 500
 const HOME_DEGREES = 0
 const TO_DEGREES = 180
 const ACCOUNT_NAME = 'east.autovote'
