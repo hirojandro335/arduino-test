@@ -1,7 +1,4 @@
 # arduino-test
 
-Run with the command:
-
-```
-node index.js
-```
+1. Install dependencies: `npm install`
+2. Run bot: `node index.js`
