@@ -1,11 +1,11 @@
-const dotenv = require("dotenv")
 const dsteem = require("dsteem")
 const es = require("event-stream")
 
-// Environment Init
-dotenv.config()
-if (!process.env.ACCOUNT_NAME) throw new Error('ENV variable missing')
-let ACCOUNT_NAME = process.env.ACCOUNT_NAME
+const MS_TO_COMPLETE = 3000
+const MS_TO_COMPLETE_WITH_BUFFER = 3500
+const HOME_DEGREES = 0
+const TO_DEGREES = 180
+const ACCOUNT_NAME = 'east.autovote'
 
 // Steem Init
 const client = new dsteem.Client('https://api.steemit.com')
@@ -13,11 +13,6 @@ const stream = client.blockchain.getOperationsStream()
 
 var five = require("johnny-five");
 var board = new five.Board({ port: "COM6" });
-
-const MS_TO_COMPLETE = 3000
-const MS_TO_COMPLETE_WITH_BUFFER = 3500
-const HOME_DEGREES = 0
-const TO_DEGREES = 180
 
 function handler() {
   console.log('move complete')
@@ -45,7 +40,7 @@ board.on("ready", function() {
     // Look for comment type of transaction
     if (operation.op[0] == 'transfer') {
       if (operation.op[1].to == ACCOUNT_NAME) {
-        console.log("received transfer to: ", ACCOUNT_NAME)
+        console.log("received transfer from: ", operation.op[1].from)
         servo.to(TO_DEGREES, MS_TO_COMPLETE);
         setTimeout(returnToHome.bind(null, servo), MS_TO_COMPLETE_WITH_BUFFER);
       }
