@@ -1,7 +1,7 @@
 # arduino-test
 
-Create a .env file. Include the following:
+Run with the command:
 
 ```
-ACCOUNT_NAME=steem_account_name
+node index.js
 ```
