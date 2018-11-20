@@ -20,6 +20,10 @@
   },
   "homepage": "https://github.com/eastmaels/arduino-test#readme",
   "dependencies": {
+    "dotenv": "^6.1.0",
+    "dsteem": "^0.11.0",
+    "event-stream": "^4.0.1",
+    "johnny-five": "^1.0.0",
     "steem": "^0.7.2",
     "valid-url": "^1.0.9"
   }
