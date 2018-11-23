@@ -45,10 +45,15 @@ function loop(servo) {
           var op = trans[1].op; // Get transaction data
 
           if (op[0] == 'transfer' && op[1].to == account.name) { // Check if transaction is transfer TO user account
+            console.log('op', op)
             var current_trx_id = trans[1].trx_id
-            if (last_trx_id !== current_trx_id) {
+
+            const isNewTrx = (last_trx_id !== current_trx_id)
+            const isOneSteem = (op[1].amount === '1.000 STEEM')
+            const containsMemo = (op[1].memo && op[1].memo.toLowerCase().indexOf('feed dog') >= 0)
+
+            if (isNewTrx && isOneSteem && containsMemo) {
               console.log('new transaction. run servo...'); // Output transaction 
-              console.log('trans', trans)
 
               servo.to(TO_DEGREES, MILLI_SECONDS_TO_COMPLETE);
               setTimeout(returnToHome.bind(null, servo), MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER);
