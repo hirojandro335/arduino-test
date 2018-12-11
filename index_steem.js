@@ -32,7 +32,7 @@ board.on("ready", function() {
 
     if (isTransferTx && isTransferToAccount) {
       console.log('is transfer transaction to target account...')
-      const isOneSteem = (operation[1].amount === '0.001 STEEM')
+      const isOneSteem = (operation[1].amount === '1.000 STEEM')
       const containsMemo = (operation[1].memo && operation[1].memo.toLowerCase().indexOf('feed dog') >= 0)
 
       if (operation[1].to == ACCOUNT_NAME) {
