@@ -1,8 +1,10 @@
 const steem = require('steem')
 var five = require("johnny-five");
 var board = new five.Board({ port: "COM6" });
+const player = require('node-wav-player');
 
 const LOOP_SPEED = 3000
+const AUDIO_PLAY_DURATION = 10000
 const MILLI_SECONDS_TO_COMPLETE = 3000
 const MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER = MILLI_SECONDS_TO_COMPLETE + 500
 const HOME_DEGREES = 0
@@ -11,10 +13,6 @@ const ACCOUNT_NAME = 'east.autovote'
 
 var account = null;
 var last_trx_id = null;
-
-function handler() {
-  console.log('move complete')
-}
 
 function returnToHome(servo){
   if(servo.value === TO_DEGREES) {
@@ -51,8 +49,21 @@ function loop(servo) {
             const isOneSteem = (op[1].amount === '1.000 STEEM')
             const containsMemo = (op[1].memo && op[1].memo.toLowerCase().indexOf('feed dog') >= 0)
 
-            if (isNewTrx && isOneSteem && containsMemo) {
+            if (isNewTrx && isOneSteem) {
               console.log('new transaction. run servo...'); // Output transaction 
+
+              player.play({
+                path: './audio/bark.wav',
+              }).then(() => {
+                console.log('The wav file started to play.');
+              }).catch((error) => {
+                console.error(error);
+              });
+
+              setTimeout(() => {
+                player.stop();
+                console.log('Audio play stopped.')
+              }, AUDIO_PLAY_DURATION);
 
               servo.to(TO_DEGREES, MILLI_SECONDS_TO_COMPLETE);
               setTimeout(returnToHome.bind(null, servo), MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER);
@@ -70,7 +81,6 @@ board.on("ready", function() {
     pin: 9,
     startAt: 0
   });
-  servo.on('move:complete', handler)
 
   board.repl.inject({
     servo: servo
