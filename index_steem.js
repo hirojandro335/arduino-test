@@ -24,18 +24,22 @@ board.on("ready", function() {
   });
 
   steem.api.streamTransactions(function (err, transaction) {
-    // Look for comment type of transaction
-    const operation = transaction.operations[0]
+  
+    if (!transaction || !transaction.operations) return
 
+    const operation = transaction.operations[0]
     const isTransferTx = (operation[0] === 'transfer')
     const isTransferToAccount = (operation[1].to === ACCOUNT_NAME)
 
+    // Look for transfer transaction and is transfer to target account
     if (isTransferTx && isTransferToAccount) {
       console.log('is transfer transaction to target account...')
+
       const isOneSteem = (operation[1].amount === '1.000 STEEM')
+      const isOneSbd = (operation[1].amount === '1.000 SBD')
       const containsMemo = (operation[1].memo && operation[1].memo.toLowerCase().indexOf('feed dog') >= 0)
 
-      if (operation[1].to == ACCOUNT_NAME) {
+      if (isOneSteem || isOneSbd) {
         console.log("received transfer from: ", operation[1].from)
 
         player.play({
