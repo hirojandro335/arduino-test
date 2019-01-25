@@ -1,6 +1,7 @@
 const es = require("event-stream")
 const steem = require("steem")
 const player = require('node-wav-player');
+const opn = require('opn');
 var five = require("johnny-five");
 var board = new five.Board({ port: "COM6" });
 
@@ -42,6 +43,10 @@ board.on("ready", function() {
       if (isOneSteem || isOneSbd) {
         console.log("received transfer from: ", operation[1].from)
 
+        // open gif html
+        opn('./thanks.html',  {app: 'chrome'});
+
+        // play audio
         player.play({
           path: './audio/bark.wav',
         }).then(() => {
