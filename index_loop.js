@@ -11,8 +11,8 @@ const HOME_DEGREES = 0
 const TO_DEGREES = 180
 const ACCOUNT_NAME = 'east.autovote'
 
-var account = null;
-var last_trx_id = null;
+let account = null;
+let last_trx_id = null;
 
 function returnToHome(servo){
   if(servo.value === TO_DEGREES) {
@@ -47,9 +47,10 @@ function loop(servo) {
 
             const isNewTrx = (last_trx_id !== current_trx_id)
             const isOneSteem = (op[1].amount === '1.000 STEEM')
+            const isOneSbd = (op[1].amount === '1.000 SBD')
             const containsMemo = (op[1].memo && op[1].memo.toLowerCase().indexOf('feed dog') >= 0)
 
-            if (isNewTrx && isOneSteem) {
+            if (isNewTrx && (isOneSteem || isOneSbd)) {
               console.log('new transaction. run servo...'); // Output transaction 
 
               player.play({
@@ -86,7 +87,7 @@ board.on("ready", function() {
     servo: servo
   });
 
-  steem.api.setOptions({ url: 'https://rpc.buildteam.io' }); // Set Steem Node
+  //steem.api.setOptions({ url: 'https://rpc.buildteam.io' }); // Set Steem Node
   setInterval(loop.bind(null, servo), LOOP_SPEED); // Create Loop
 
 });
