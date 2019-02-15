@@ -63,14 +63,14 @@ board.on("ready", function() {
         player.play({
           path: './audio/bark.wav',
         }).then(() => {
-          console.log('The wav file started to play.');
+          console.log('play wav.');
         }).catch((error) => {
           console.error(error);
         });
 
         setTimeout(() => {
           player.stop();
-          console.log('Audio play stopped.')
+          console.log('stop wav.')
         }, AUDIO_PLAY_DURATION);
 
         servo.to(TO_DEGREES, MILLI_SECONDS_TO_COMPLETE);
