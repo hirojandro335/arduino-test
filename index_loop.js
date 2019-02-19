@@ -20,6 +20,26 @@ function returnToHome(servo){
   }
 }
 
+function greetDog() {
+  player.play({
+    path: './audio/bark.wav',
+  }).then(() => {
+    console.log('The wav file started to play.');
+  }).catch((error) => {
+    console.error(error);
+  });
+
+  setTimeout(() => {
+    player.stop();
+    console.log('Audio play stopped.')
+  }, AUDIO_PLAY_DURATION);
+}
+
+function feedDog(servo) {
+  servo.to(TO_DEGREES, MILLI_SECONDS_TO_COMPLETE);
+  setTimeout(returnToHome.bind(null, servo), MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER);
+}
+
 function loop(servo) {
   console.log('looping every ' + (LOOP_SPEED)/1000 + ' seconds'); // Output
 
@@ -48,26 +68,22 @@ function loop(servo) {
             const isNewTrx = (last_trx_id !== current_trx_id)
             const isOneSteem = (op[1].amount === '1.000 STEEM')
             const isOneSbd = (op[1].amount === '1.000 SBD')
-            const containsMemo = (op[1].memo && op[1].memo.toLowerCase().indexOf('feed dog') >= 0)
+
+            const memo = op[1].memo
+            const isFeedDog = (memo && memo.toLowerCase().indexOf('feed dog') >= 0)
+            const isGreetDog = (memo && memo.toLowerCase().indexOf('greet dog') >= 0)
 
             if (isNewTrx && (isOneSteem || isOneSbd)) {
-              console.log('new transaction. run servo...'); // Output transaction 
+              console.log('new transaction. with memo: ', op[1].memo); // Output transaction 
 
-              player.play({
-                path: './audio/bark.wav',
-              }).then(() => {
-                console.log('The wav file started to play.');
-              }).catch((error) => {
-                console.error(error);
-              });
+              if (isGreetDog) {
+                greetDog()
+              }
 
-              setTimeout(() => {
-                player.stop();
-                console.log('Audio play stopped.')
-              }, AUDIO_PLAY_DURATION);
+              if (isFeedDog) {
+                feedDog(servo)
+              }
 
-              servo.to(TO_DEGREES, MILLI_SECONDS_TO_COMPLETE);
-              setTimeout(returnToHome.bind(null, servo), MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER);
               last_trx_id = current_trx_id
             }
           }
