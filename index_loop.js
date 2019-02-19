@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const steem = require('steem')
 var five = require("johnny-five");
 var board = new five.Board({ port: "COM6" });
@@ -9,7 +11,10 @@ const MILLI_SECONDS_TO_COMPLETE = 3000
 const MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER = MILLI_SECONDS_TO_COMPLETE + 500
 const HOME_DEGREES = 0
 const TO_DEGREES = 180
-const ACCOUNT_NAME = 'east.autovote'
+
+const ACCOUNT_NAME = (process.env.ACCOUNT_NAME || 'east.autovote')
+const STEEM_FEE = (process.env.STEEM_FEE || '1.000')
+const SBD_FEE = (process.env.SBD_FEE || '1.000')
 
 let account = null;
 let last_trx_id = null;
@@ -66,8 +71,9 @@ function loop(servo) {
             var current_trx_id = trans[1].trx_id
 
             const isNewTrx = (last_trx_id !== current_trx_id)
-            const isOneSteem = (op[1].amount === '1.000 STEEM')
-            const isOneSbd = (op[1].amount === '1.000 SBD')
+            const transferAmt = op[1].amount
+            const isOneSteem = (transferAmt === STEEM_FEE + ' STEEM')
+            const isOneSbd = (transferAmt === SBD_FEE + ' SBD')
 
             const memo = op[1].memo
             const isFeedDog = (memo && memo.toLowerCase().indexOf('feed dog') >= 0)
