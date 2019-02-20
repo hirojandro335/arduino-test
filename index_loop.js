@@ -17,6 +17,10 @@ const ACCOUNT_NAME = (process.env.ACCOUNT_NAME || 'east.autovote')
 const STEEM_FEE = (process.env.STEEM_FEE || '1.000')
 const SBD_FEE = (process.env.SBD_FEE || '1.000')
 
+console.log('ACCOUNT_NAME', ACCOUNT_NAME)
+console.log('STEEM_FEE', STEEM_FEE)
+console.log('SBD_FEE', SBD_FEE)
+
 let account = null;
 let last_trx_id = null;
 
@@ -84,7 +88,7 @@ function loop(servo) {
               console.log('new transaction. with memo: ', op[1].memo); // Output transaction 
 
               // open gif html
-              opn('./thanks.html',  {app: 'chrome'});
+              opn('.\\thanks.html',  {app: 'chrome'});
 
               if (isGreetDog) {
                 greetDog()
