@@ -4,6 +4,7 @@ const steem = require('steem')
 var five = require("johnny-five");
 var board = new five.Board({ port: "COM6" });
 const player = require('node-wav-player');
+const opn = require('opn');
 
 const LOOP_SPEED = 3000
 const AUDIO_PLAY_DURATION = 10000
@@ -81,6 +82,9 @@ function loop(servo) {
 
             if (isNewTrx && (isOneSteem || isOneSbd)) {
               console.log('new transaction. with memo: ', op[1].memo); // Output transaction 
+
+              // open gif html
+              opn('./thanks.html',  {app: 'chrome'});
 
               if (isGreetDog) {
                 greetDog()
