@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const steem = require('steem')
+const hive = require('hive-api')
 var five = require("johnny-five");
 var board = new five.Board({ port: "COM6" });
 const player = require('node-wav-player');
@@ -13,13 +13,13 @@ const MILLI_SECONDS_TO_COMPLETE_WITH_BUFFER = MILLI_SECONDS_TO_COMPLETE + 500
 const HOME_DEGREES = 0
 const TO_DEGREES = 180
 
-const ACCOUNT_NAME = (process.env.ACCOUNT_NAME || 'east.autovote')
-const STEEM_FEE = (process.env.STEEM_FEE || '1.000')
-const SBD_FEE = (process.env.SBD_FEE || '1.000')
+const ACCOUNT_NAME = (process.env.ACCOUNT_NAME || 'hiro-hive')
+const HIVE_FEE = (process.env.HIVE_FEE || '1.000')
+const HBD_FEE = (process.env.HBD_FEE || '1.000')
 
 console.log('ACCOUNT_NAME', ACCOUNT_NAME)
-console.log('STEEM_FEE', STEEM_FEE)
-console.log('SBD_FEE', SBD_FEE)
+console.log('HIVE_FEE', HIVE_FEE)
+console.log('HBD_FEE', HBD_FEE)
 
 let account = null;
 let last_trx_id = null;
@@ -53,7 +53,7 @@ function feedDog(servo) {
 function loop(servo) {
   console.log('looping every ' + (LOOP_SPEED)/1000 + ' seconds'); // Output
 
-  steem.api.getAccounts([ACCOUNT_NAME], function (err, result) { // Get Account Data
+  hive.api.getAccounts([ACCOUNT_NAME], function (err, result) { // Get Account Data
     if (err || !result) { // Check for Errors
       console.log('Error loading account: ' + err); // Output Error
       return;
@@ -62,7 +62,7 @@ function loop(servo) {
   });
 
   if (account) {
-    steem.api.getAccountHistory(account.name, -1, 0, function (err, result) { // Get last transaction of account
+    hive.api.getAccountHistory(account.name, -1, 0, function (err, result) { // Get last transaction of account
 
       if (err || !result) { // Check for errors
         console.log('Error loading account history: ' + err); // Output error
@@ -77,14 +77,14 @@ function loop(servo) {
 
             const isNewTrx = (last_trx_id !== current_trx_id)
             const transferAmt = op[1].amount
-            const isOneSteem = (transferAmt === STEEM_FEE + ' STEEM')
-            const isOneSbd = (transferAmt === SBD_FEE + ' SBD')
+            const isOneHive = (transferAmt === HIVE_FEE + ' HIVE')
+            const isOneHbd = (transferAmt === HBD_FEE + ' HBD')
 
             const memo = op[1].memo
             const isFeedDog = (memo && memo.toLowerCase().indexOf('feed dog') >= 0)
             const isGreetDog = (memo && memo.toLowerCase().indexOf('greet dog') >= 0)
 
-            if (isNewTrx && (isOneSteem || isOneSbd)) {
+            if (isNewTrx && (isOneHive || isOneHbd)) {
               console.log('new transaction. with memo: ', op[1].memo); // Output transaction 
 
               // open gif html
